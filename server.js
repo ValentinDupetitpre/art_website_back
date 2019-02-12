@@ -66,6 +66,13 @@ app.get('/collection/title', (req, res) => {
     return response.then(collec=> res.json(collec)); 
 });
 
+app.get('/painting/title', (req, res) => {
+    const response = Paintings.findAll({
+        attributes: ['id', 'name'] 
+    })
+    return response.then(painting=> res.json(painting)); 
+});
+
 const database = new Sequelize({
     dialect: 'sqlite',
     storage: './db.sqlite',
@@ -85,6 +92,7 @@ const Collection = database.define('collections', {
     pic: Sequelize.BLOB,
 });
 
+Collection.hasMany(Paintings, { onDelete: 'cascade', hooks:true });
 Paintings.belongsTo(Collection); 
 
 epilogue.initialize({ app, sequelize: database });
