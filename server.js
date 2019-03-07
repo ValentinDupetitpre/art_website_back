@@ -73,6 +73,15 @@ app.get('/painting/title', (req, res) => {
     return response.then(painting=> res.json(painting)); 
 });
 
+app.get('/gallery/:id', (req, res)=>{
+    const response = Paintings.findAll({
+        where:{
+            collectionId: req.params.id
+        }
+    })
+    return response.then(paintings => res.json(paintings));
+});
+
 const database = new Sequelize({
     dialect: 'sqlite',
     storage: './db.sqlite',
@@ -92,6 +101,19 @@ const Collection = database.define('collections', {
     pic: Sequelize.BLOB,
 });
 
+const Home = database.define('home', {
+    title: Sequelize.STRING,
+    title_bloc1: Sequelize.STRING,
+    title_bloc2: Sequelize.STRING,
+    title_bloc3: Sequelize.STRING,
+    bloc1: Sequelize.TEXT,
+    bloc2: Sequelize.TEXT,
+    bloc3: Sequelize.TEXT,
+    pic1: Sequelize.BLOB,
+    pic2: Sequelize.BLOB,
+    pic3: Sequelize.BLOB,
+})
+
 Collection.hasMany(Paintings, { onDelete: 'cascade', hooks:true });
 Paintings.belongsTo(Collection); 
 
@@ -107,6 +129,11 @@ const CollectionResource = epilogue.resource({
     endpoints: ['/collection', '/collection/:id'],
 });
 
+const HomeResource = epilogue.resource({
+    model: Home,
+    endpoints: ['/home-data', '/home-data/:id'],
+})
+
 PaintingsResource.create.auth(function(req, res, context) {
     return new Promise(function(resolve, reject) {
         resolve(context.continue);
@@ -118,6 +145,12 @@ CollectionResource.create.auth(function (req, res, context) {
         resolve(context.continue);
     })
 });
+
+HomeResource.create.auth(function(req, res, context) {
+    return new Promise(function(resolve, reject) {
+        resolve(context.continue);
+    })
+})
 
 // CollectionResource.all.auth(function (req, res, context) {
 //     checkAuth(req, res, context);
