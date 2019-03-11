@@ -8,6 +8,7 @@ import bodyParser from 'body-parser'
 import session from 'express-session'
 import { ExpressOIDC } from '@okta/oidc-middleware'
 dotenv.config()
+import sharp from 'sharp'
 
 import Sequelize from 'sequelize'
 import epilogue from 'epilogue'
@@ -91,6 +92,7 @@ const database = new Sequelize({
 const Paintings = database.define('paintings', {
     name: Sequelize.STRING,
     pic: Sequelize.BLOB,
+    smallPic: Sequelize.BLOB,
     detail: Sequelize.TEXT,
     likes: Sequelize.INTEGER,
 });
@@ -134,9 +136,24 @@ const HomeResource = epilogue.resource({
     endpoints: ['/home-data', '/home-data/:id'],
 })
 
-PaintingsResource.create.auth(function(req, res, context) {
+PaintingsResource.create.write.before(function(req, res, context) {
     return new Promise(function(resolve, reject) {
-        resolve(context.continue);
+        const uri = req.body.pic.split(';base64,').pop()
+        const img = Buffer.from(uri, 'base64');
+        sharp(img)
+        .resize({ 
+            width: 350,
+            height: 380,
+            fit: 'contain' ,
+            background: { r: 255, g: 255, b: 255, alpha: 1 }
+        })
+        .toBuffer({ resolveWithObject: true })
+        .then(({ data, info }) => { 
+            req.body.smallPic = data
+            req.body.pic = img
+            resolve(context.continue)
+         })
+        .catch(err => console.log(err));
     })
 });
 
