@@ -62,7 +62,17 @@ app.get('/', (req, res) => {
 
 app.get('/collection/title', (req, res) => {
     const response = Collection.findAll({
-        attributes: ['id', 'name'] 
+        attributes: ['id', 'name','detail'] 
+    })
+    return response.then(collec=> res.json(collec)); 
+});
+
+app.get('/collection/:id/pic', (req, res) => {
+    const response = Collection.findAll({
+        where:{
+            id: req.params.id
+        },
+        attributes: ['id', 'pic'] 
     })
     return response.then(collec=> res.json(collec)); 
 });
@@ -102,6 +112,20 @@ app.get('/gallery/:id', (req, res)=>{
     })
     return response.then(paintings => res.json(paintings));
 });
+
+app.get('/home-data/text', (req,res)=>{
+    const response = Home.findAll({
+        attributes: ['id','title','title_bloc1','title_bloc2','title_bloc3','bloc1','bloc2','bloc3']
+    })
+    return response.then(home => res.json(home))
+})
+
+app.get('/home-data/pics', (req, res)=>{
+    const response = Home.findAll({
+        attributes: ['id', 'pic1', 'pic2', 'pic3']
+    })
+    return response.then(home=>res.json(home))
+})
 
 const database = new Sequelize({
     dialect: 'sqlite',
@@ -177,9 +201,23 @@ PaintingsResource.create.write.before(function(req, res, context) {
     })
 });
 
-CollectionResource.create.auth(function (req, res, context) {
+CollectionResource.update.write.before(function (req, res, context) {
     return new Promise(function (resolve, reject) {
-        resolve(context.continue);
+        const uri = req.body.pic.split(';base64,').pop()
+        const img = Buffer.from(uri, 'base64');
+        req.body.pic = img
+
+        resolve(context.continue)
+    })
+});
+
+CollectionResource.create.write.before(function (req, res, context) {
+    return new Promise(function (resolve, reject) {
+        const uri = req.body.pic.split(';base64,').pop()
+        const img = Buffer.from(uri, 'base64');
+        req.body.pic = img
+
+        resolve(context.continue)
     })
 });
 
