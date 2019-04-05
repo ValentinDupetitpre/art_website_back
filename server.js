@@ -188,8 +188,7 @@ PaintingsResource.create.write.before(function(req, res, context) {
         .resize({ 
             width: 350,
             height: 380,
-            fit: 'contain' ,
-            background: { r: 255, g: 255, b: 255, alpha: 1 }
+            fit: 'inside'
         })
         .toBuffer({ resolveWithObject: true })
         .then(({ data, info }) => { 
