@@ -14,9 +14,17 @@ import Sequelize from 'sequelize'
 import epilogue from 'epilogue'
 const ForbiddenError = epilogue.Errors.ForbiddenError
 
+import nodemailer from 'nodemailer'
 
 const app = express()
 const port = 5000
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+        user: 'valentin.dupetitpre@ux-republic.com',
+        pass: 'Mot de passe du compte mail'
+   }
+});
 
 app.use(session({
     secret: process.env.RANDOM_SECRET_WORD,
@@ -46,6 +54,29 @@ app.use(bodyParser.json({limit: '50mb'}));
 app.get('/home', (req, res) => {
     res.send('<h1>Welcome!!</div><a href="/login">Login</a>');
 });
+
+app.post('/contact', (req, res)=>{
+    const mailOptions = {
+        from: req.body.email, // sender address
+        to: 'valentin.dupetitpre@gmail.com', // list of receivers
+        subject: req.body.subject, // Subject line
+        html: `
+        <div>
+            <h3>Message de : ${req.body.name}</h3>
+            <h3>Mail de ${req.body.name} : ${req.body.email}</h3>
+            <pre style="font-family: arial">Message : ${req.body.message}</pre>
+        </div>`// plain text body
+    };
+
+    transporter.sendMail(mailOptions, function (err, info) {
+        if(err)
+          console.log(err)
+        else
+          console.log(info);
+    });
+    res.writeHead(201);
+    res.end();
+})
 
 app.get('/admin', oidc.ensureAuthenticated(), (req, res) =>{
     res.send('Admin page');
@@ -100,6 +131,16 @@ app.get('/painting/:id/smallpic', (req,res)=>{
             id: req.params.id
         },
         attributes: ['id', 'smallPic']
+    })
+    return response.then(painting=>res.json(painting))
+})
+
+app.get('/painting/:id/pic', (req,res)=>{
+    const response = Paintings.findAll({
+        where: {
+            id: req.params.id
+        },
+        attributes: ['id', 'pic']
     })
     return response.then(painting=>res.json(painting))
 })
