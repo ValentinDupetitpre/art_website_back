@@ -140,7 +140,7 @@ app.get('/painting/:id/pic', (req,res)=>{
         where: {
             id: req.params.id
         },
-        attributes: ['id', 'pic']
+        attributes: ['id', 'pic', 'name', 'detail']
     })
     return response.then(painting=>res.json(painting))
 })
