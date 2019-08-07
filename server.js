@@ -115,14 +115,24 @@ app.get('/painting/title', (req, res) => {
     return response.then(painting=> res.json(painting)); 
 });
 
-app.get('/gallery/:id/text', (req, res)=>{
-    const response = Paintings.findAll({
+app.get('/gallery/:id/text', (req, res) => {
+    const paintings = Paintings.findAll({
         where:{
             collectionId: req.params.id
         },
-        attributes: ['id','name','detail','likes']
+        attributes: ['id','name','detail','likes'],
     })
-    return response.then(paintings => res.json(paintings))
+    const collec = Collection.find({
+        where:{
+            id: req.params.id
+        },
+        attributes: ['id', 'name']
+    })
+    return collec.then(collection => {
+        return paintings.then(painting => {
+            return res.json({collection, painting})
+        })
+    })
 })
 
 app.get('/painting/:id/smallpic', (req,res)=>{
