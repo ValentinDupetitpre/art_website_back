@@ -17,7 +17,7 @@ const ForbiddenError = epilogue.Errors.ForbiddenError
 import nodemailer from 'nodemailer'
 
 const app = express()
-const port = 5000
+const port = process.env.PORT || 5000
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
