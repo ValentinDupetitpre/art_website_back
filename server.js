@@ -178,9 +178,9 @@ app.get('/home-data/pics', (req, res)=>{
     return response.then(home=>res.json(home))
 })
 
-const database = new Sequelize({
+const database = new Sequelize('./init_bdd.sql', 'root', 'root',{
     dialect: 'sqlite',
-    storage: './init_bdd.sql',
+    storage: './db.sqlite',
     operatorsAliases: false,
 });
 
