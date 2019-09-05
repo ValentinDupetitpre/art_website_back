@@ -180,7 +180,7 @@ app.get('/home-data/pics', (req, res)=>{
 
 const database = new Sequelize({
     dialect: 'sqlite',
-    storage: './db.sqlite',
+    storage: './init_bdd.sql',
     operatorsAliases: false,
 });
 
@@ -320,6 +320,11 @@ const checkAuth = (req, res, context)=>{
             resolve(context.continue);
         }
     })
+}
+
+const insertData = () =>{
+    console.log("Insert data")
+    db.run();
 }
 
 database.sync().then(() => {
