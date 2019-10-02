@@ -50,13 +50,13 @@ app.use(oidc.router);
 app.use(cors());
 app.use(bodyParser.json({limit: '50mb'}));
 
-app.get('/*', function(req, res) {
-    res.sendFile(path.join(__dirname, 'client/build/index.html'), function(err) {
-      if (err) {
-        res.status(500).send(err)
-      }
-    })
-  })
+// app.get('/*', function(req, res) {
+//     res.sendFile(path.join(__dirname, 'client/build/index.html'), function(err) {
+//       if (err) {
+//         res.status(500).send(err)
+//       }
+//     })
+//   })
 
 // app.use('/', Routes)
 // app.get('/home', (req, res) => {
