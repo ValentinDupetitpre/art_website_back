@@ -331,7 +331,7 @@ const checkAuth = (req, res, context)=>{
 }
 
 var fs = require('fs')
-var readStream = fs.createReadStream('./ini_bdd.sql', 'utf8')
+var readStream = fs.createReadStream('./init_bdd.sql', 'utf8')
 
 let data = ''
 readStream.on('data', function(chunk) {
