@@ -186,7 +186,7 @@ app.get('/home-data/pics', (req, res)=>{
     return response.then(home=>res.json(home))
 })
 
-const database = new Sequelize('./init_bdd.sql', 'root', 'root',{
+const database = new Sequelize({
     dialect: 'sqlite',
     storage: './db.sqlite',
     operatorsAliases: false,
@@ -330,10 +330,11 @@ const checkAuth = (req, res, context)=>{
     })
 }
 
-const insertData = () =>{
-    console.log("Insert data")
-    db.run();
-}
+var sys = require('sys')
+var exec = require('init_bdd.sql').exec;
+function puts(error, stdout, stderr) {sys.puts(nouveau_fichier.sql)}
+
+exec("sqlite3 {db} < {monscript}", puts);
 
 database.sync().then(() => {
     oidc.on('ready', () => {
