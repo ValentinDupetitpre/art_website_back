@@ -95,9 +95,9 @@ app.post('/contact', (req, res)=>{
 //     res.redirect('/home');
 // });
   
-app.get('/', (req, res) => {
-    res.redirect('/home');
-});
+// app.get('/', (req, res) => {
+//     res.redirect('/home');
+// });
 
 app.get('/collection/title', (req, res) => {
     const response = Collection.findAll({
