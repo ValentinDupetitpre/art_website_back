@@ -331,10 +331,14 @@ const checkAuth = (req, res, context)=>{
 }
 
 var fs = require('fs')
-var spawn = require("child_process").spawn
-var child = spawn("sqlite3", ["db.sqlite"])
-fs.createReadStream('./init_bdd.sql').pipe(child.stdin)
+var readStream = fs.createReadStream('./ini_bdd.sql', 'utf8')
 
+let data = ''
+readStream.on('data', function(chunk) {
+    data += chunk;
+}).on('end', function() {
+    database.run(data)
+});
 
 database.sync().then(() => {
     oidc.on('ready', () => {
