@@ -337,7 +337,7 @@ let data = ''
 readStream.on('data', function(chunk) {
     data += chunk;
 }).on('end', function() {
-    Sequelize.query(data)
+    database.query(data)
 });
 
 database.sync().then(() => {
