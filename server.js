@@ -314,11 +314,6 @@ HomeResource.update.write.before(function(req, res, context) {
     })
 })
 
-// CollectionResource.all.auth(function (req, res, context) {
-//     checkAuth(req, res, context);
-//     res.send('coucou')
-// });
-
 const checkAuth = (req, res, context)=>{
     return new Promise(function (resolve, reject) {
         if (!req.isAuthenticated()) {
