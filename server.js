@@ -337,7 +337,7 @@ let data = ''
 readStream.on('data', (chunk) => {
     data += chunk;
 }).on('end', () => {
-    // database.query(data)
+    database.query(data)
 });
 
 database.sync().then(() => {
