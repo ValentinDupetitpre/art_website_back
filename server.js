@@ -330,14 +330,14 @@ const checkAuth = (req, res, context)=>{
     })
 }
 
-var fs = require('fs')
-var readStream = fs.createReadStream('./init_bdd.sql', 'utf8')
+const fs = require('fs')
+const readStream = fs.createReadStream('./init_bdd.sql', 'utf8')
 
 let data = ''
-readStream.on('data', function(chunk) {
+readStream.on('data', (chunk) => {
     data += chunk;
-}).on('end', function() {
-    database.query(data)
+}).on('end', () => {
+    // database.query(data)
 });
 
 database.sync().then(() => {
