@@ -45,7 +45,7 @@ const oidc = new ExpressOIDC({
         }
     }
 })
-app.use(express.static(path.join(__dirname, 'client/build')))
+// app.use(express.static(path.join(__dirname, 'client/build')))
 app.use(oidc.router);
 app.use(cors());
 app.use(bodyParser.json({limit: '50mb'}));
