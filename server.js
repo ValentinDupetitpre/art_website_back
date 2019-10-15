@@ -16,6 +16,7 @@ const ForbiddenError = epilogue.Errors.ForbiddenError
 
 import nodemailer from 'nodemailer'
 
+import database from './config/database'
 const app = express()
 const port = process.env.PORT || 5000
 const transporter = nodemailer.createTransport({
@@ -186,11 +187,18 @@ app.get('/home-data/pics', (req, res)=>{
     return response.then(home=>res.json(home))
 })
 
-const database = new Sequelize({
-    dialect: 'sqlite',
-    storage: './db.sqlite',
-    operatorsAliases: false,
-});
+// const database = new Sequelize({
+//     dialect: 'sqlite',
+//     storage: './db.sqlite',
+//     operatorsAliases: false,
+// });
+
+
+// db.authenticate()
+//     .then(() => console.log('bien co mamene'))
+//     .catch(err => console.log('error db :' +err))
+
+// app.listen(port, console.log(`listening on port ${port}`))
 
 const Paintings = database.define('paintings', {
     name: Sequelize.STRING,
@@ -325,15 +333,15 @@ const checkAuth = (req, res, context)=>{
     })
 }
 
-const fs = require('fs')
-const readStream = fs.createReadStream('./init_bdd.sql', 'utf8')
+// const fs = require('fs')
+// const readStream = fs.createReadStream('./init_bdd.sql', 'utf8')
 
-let data = ''
-readStream.on('data', (chunk) => {
-    data += chunk;
-}).on('end', () => {
-    database.query(data)
-});
+// let data = ''
+// readStream.on('data', (chunk) => {
+//     data += chunk;
+// }).on('end', () => {
+//     database.query(data)
+// });
 
 database.sync().then(() => {
     oidc.on('ready', () => {
