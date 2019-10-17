@@ -1,5 +1,5 @@
 import Sequelize from 'sequelize'
-import db from '../config/database'
+import database from '../config/database'
 
 const Home = database.define('home', {
     title: Sequelize.STRING,
@@ -13,3 +13,13 @@ const Home = database.define('home', {
     pic2: Sequelize.BLOB,
     pic3: Sequelize.BLOB,
 })
+
+// If no row init a first one with id and mandatory fields (createdAt and modifiedAt)
+Home.sync().then(() => {
+    // Table created
+    return Home.findOrCreate({
+        where: {id: 1}, defaults: {}
+    });
+});
+
+module.exports = Home 
