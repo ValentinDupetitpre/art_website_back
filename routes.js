@@ -15,7 +15,6 @@ Routes.get('/collection/title', Collection.getText)
 Routes.get('/collection/:id/pic', Collection.getPics)
 
 //Gallery pages
-Routes.get('/gallery/:id', Gallery.getPaintingsOfCollection) //peut etre inutile
 Routes.get('/gallery/:id/text', Gallery.getTextFromCollectionOfPaintings)
 Routes.get('/painting/title', Gallery.getAllText)
 Routes.get('/painting/:id/smallpic', Gallery.getSmallPics)
