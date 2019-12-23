@@ -3,6 +3,7 @@ import Gallery from "./controllers/gallery"
 import Contact from "./controllers/contact"
 import Home from "./controllers/home"
 import Collection from "./controllers/collection"
+import Article from "./controllers/article"
 
 const Routes = express.Router()
 
@@ -19,6 +20,10 @@ Routes.get('/gallery/:id/text', Gallery.getTextFromCollectionOfPaintings)
 Routes.get('/painting/title', Gallery.getAllText)
 Routes.get('/painting/:id/smallpic', Gallery.getSmallPics)
 Routes.get('/painting/:id/pic', Gallery.getPic)
+
+//Article page
+Routes.get('/article/title', Article.getAllTitles)
+Routes.get('/article/:id/Pic', Article.getPics)
 
 
 //Contact page

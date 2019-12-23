@@ -34,7 +34,7 @@ const oidc = new ExpressOIDC({
         }
     }
 })
-// app.use(express.static(path.join(__dirname, 'client/build')))
+
 app.use(oidc.router);
 app.use(cors());
 app.use(bodyParser.json({limit: '50mb'}));
@@ -56,6 +56,8 @@ import Paintings from './models/Paintings'
 import galleryMiddleware from './controllers/gallery-middleware'
 import collectionMiddleware from './controllers/collection-middleware'
 import homeMiddleware from './controllers/home-middleware'
+import Article from './models/Article'
+import articleMiddleware from './controllers/article-middleware'
 
 epilogue.initialize({ app, sequelize: database });
 
@@ -74,9 +76,15 @@ const HomeResource = epilogue.resource({
     endpoints: ['/home-data', '/home-data/:id'],
 })
 
+const ArticleResource = epilogue.resource({
+    model: Article,
+    endpoints: ['/article', '/article/:id']
+})
+
 PaintingsResource.use(galleryMiddleware)
 CollectionResource.use(collectionMiddleware)
 HomeResource.use(homeMiddleware)
+ArticleResource.use(articleMiddleware)
 
 
 const checkAuth = (req, res, context)=>{
